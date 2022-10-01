@@ -8,6 +8,7 @@ import { Helmet } from 'react-helmet-async';
 import { fetchCoinInfo, fetchCoinTickers } from "../api";
 import Chart from "./Chart";
 import Price from "./Price";
+import Coins from "./Coins";
 
 const Container = styled.div`
     padding: 0px 20px;
@@ -15,11 +16,17 @@ const Container = styled.div`
     margin: 0 auto;
 `;
 
+// const HeaderContainer = styled.div`
+//   flex-direction: row;
+
+// `;
+
 const Header = styled.header`
     height: 10vh;
     display: flex;
     justify-content: center;
     align-items: center;
+
 `;
 
 const Title = styled.h1`
@@ -77,14 +84,22 @@ const Tab = styled.span<{ isActive: boolean }>`
 `;
 
 
-// ? not use in react router dom v6
-interface RouteParams {
-    coinId: string;
-}
 
-interface RouteState {
-    name: string;
-}
+const BackButton = styled.button`
+  color: 'light';
+  border: 0px;
+  border-radius: 5px;
+`
+
+
+// ? not use in react router dom v6
+// interface RouteParams {
+//     coinId: string;
+// }
+
+// interface RouteState {
+//     name: string;
+// }
 
 interface InfoData {
     id: string;
@@ -166,11 +181,24 @@ const Coin = () => {
                     {state?.name ? state.name : loading ? "Loading..." : infoData?.name}
                 </title>
             </Helmet>
+            <Link to="/">
+                Go back
+            </Link>
+            {/* <BackButton onClick={() => {
+                console.log("button clicked");
+                return (<Link to="/">)
+
+            }}>
+                Go back
+            </BackButton> */}
             <Header>
                 <Title>
                     {state?.name ? state.name : loading ? "Loading..." : infoData?.name}
                 </Title>
             </Header>
+
+
+
             {
                 loading ? (
                     <Loader>Loading...</Loader>
