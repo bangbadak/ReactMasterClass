@@ -3,8 +3,9 @@ import { useQuery } from "react-query";
 import { Link, PathMatch } from "react-router-dom";
 import { useLocation, useParams, useMatch, Routes, Route } from "react-router-dom";
 import styled from 'styled-components';
-import { fetchCoinInfo, fetchCoinTickers } from "../api";
+import { Helmet } from 'react-helmet-async';
 
+import { fetchCoinInfo, fetchCoinTickers } from "../api";
 import Chart from "./Chart";
 import Price from "./Price";
 
@@ -148,11 +149,23 @@ const Coin = () => {
     const chartMatch: PathMatch<"coinId"> | null = useMatch("/:coinId/chart")
     const priceMatch: PathMatch<"coinId"> | null = useMatch("/:coinId/price")
     const { isLoading: infoLoading, data: infoData } = useQuery<InfoData>(["info", coinId], () => fetchCoinInfo(coinId!)); //useQuery(["info", coinId], () => fetchCoinInfo(`${coinId}`));
-    const { isLoading: tickersLoading, data: tickersData } = useQuery<TickersData>(["tickers", coinId], () => fetchCoinTickers(coinId!));
+    const { isLoading: tickersLoading, data: tickersData } = useQuery<TickersData>(
+        ["tickers", coinId],
+        () => fetchCoinTickers(coinId!),
+        {
+            refetchInterval: 5000,
+        }
+    );
+
     const loading = infoLoading || tickersLoading;
 
     return (
         <Container>
+            <Helmet>
+                <title>
+                    {state?.name ? state.name : loading ? "Loading..." : infoData?.name}
+                </title>
+            </Helmet>
             <Header>
                 <Title>
                     {state?.name ? state.name : loading ? "Loading..." : infoData?.name}
@@ -173,8 +186,8 @@ const Coin = () => {
                                 <span>{infoData?.symbol}</span>
                             </OverviewItem>
                             <OverviewItem>
-                                <span>Open Source:</span>
-                                <span>{infoData?.open_source ? "Yes" : "No"}</span>
+                                <span>Price:</span>
+                                <span>{tickersData?.quotes.USD.price}</span>
                             </OverviewItem>
                         </Overview>
                         <Description>{infoData?.description}</Description>
