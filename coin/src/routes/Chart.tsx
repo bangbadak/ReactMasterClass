@@ -6,6 +6,7 @@ import Price from "./Price";
 
 interface CharProps {
     coinId: string;
+    isDark: boolean;
 }
 
 interface IHistorical {
@@ -19,7 +20,7 @@ interface IHistorical {
     market_cap: number;
 }
 
-const Chart = ({ coinId }: CharProps) => {
+const Chart = ({ coinId, isDark }: CharProps) => {
     const { isLoading, data } = useQuery<IHistorical[]>(["ohlcv", coinId], () => fetchCoinHistory(coinId!));
     return (
         <div>
@@ -39,9 +40,9 @@ const Chart = ({ coinId }: CharProps) => {
 
                     ]}
                     options={{
-                        // theme: {
-                        //     mode: "dark"
-                        // },
+                        theme: {
+                            mode: isDark ? "dark" : "light",
+                        },
                         chart: {
                             height: 500,
                             width: 500,

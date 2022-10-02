@@ -1,7 +1,11 @@
-import { createGlobalStyle } from 'styled-components';
-import Router from './Router';
+import { createGlobalStyle, ThemeProvider } from 'styled-components';
 import { ReactQueryDevtools } from 'react-query/devtools';
 import { HelmetProvider } from "react-helmet-async";
+
+import Router from './Router';
+import { darkTheme, lightTheme } from './theme';
+import { useState } from 'react';
+
 
 const GlobalStyle = createGlobalStyle`
 @import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300;400&display=swap');
@@ -67,14 +71,19 @@ a {
 `
 
 function App() {
+  const [isDark, setIsDark] = useState(false);
+  const toggleDark = () => setIsDark(current => !current);
   return (
     <>
-      <GlobalStyle />
-      <HelmetProvider>
-        <Router />
+      <ThemeProvider theme={isDark ? darkTheme : lightTheme}>
+        <GlobalStyle />
+        <HelmetProvider>
+          <Router isDark={isDark} toggleDark={toggleDark} />
 
-      </HelmetProvider>
-      <ReactQueryDevtools initialIsOpen={true} />
+        </HelmetProvider>
+        <ReactQueryDevtools initialIsOpen={true} /> {/* ? on/off */}
+
+      </ThemeProvider>
     </>
 
   );
