@@ -7,6 +7,8 @@ import { Helmet } from 'react-helmet-async';
 
 
 import { fetchCoins } from "../api";
+import { useSetRecoilState } from "recoil";
+import { isDarkAtom } from "../atoms";
 
 const Container = styled.div`
     padding: 0px 20px;
@@ -16,6 +18,7 @@ const Container = styled.div`
 
 const Header = styled.header`
     height: 10vh;
+    margin: 10px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -70,7 +73,8 @@ interface ICoin {
 }
 
 const Coins = () => {
-
+    const setDarkAtom = useSetRecoilState(isDarkAtom);
+    const toggleDarkAtom = () => setDarkAtom(prev => !prev);
     const { isLoading, data } = useQuery<ICoin[]>(["allCoins"], fetchCoins);
 
     return (
@@ -82,6 +86,7 @@ const Coins = () => {
             </Helmet>
             <Header>
                 <Title>코인</Title>
+                <button onClick={toggleDarkAtom}>Toggle Modes</button>
             </Header>
             {isLoading ? <Loader>Loading...</Loader>
                 : (<CoinsList>
