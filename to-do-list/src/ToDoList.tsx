@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useForm } from 'react-hook-form';
 
-type IFormData = {
+type IForm = {
     errors: {
         email: {
             message: string;
@@ -9,8 +9,11 @@ type IFormData = {
     };
     firstName: string;
     lastName: string;
+    username: string;
     email: string;
     password: string;
+    password1: string;
+    extraError?: string;
 }
 
 // const ToDoList = () => {
@@ -38,35 +41,83 @@ type IFormData = {
 // }
 
 const ToDoList = () => {
-    const { register, watch, handleSubmit, formState: { errors } } = useForm<IFormData>({
+    const { register, watch, handleSubmit, formState: { errors }, setError } = useForm<IForm>({
         defaultValues: {
             email: "@naver.com"
         }
     });
-    const onValid = (data: any) => {
-        console.log("data : " + data);
+    const onValid = (data: IForm) => {
+        if (data.password !== data.password1) {
+            return setError("password1", {
+                message: "Password are not the same",
+
+            }, { shouldFocus: true })
+        }
+        console.log(data)
+        // setError("extraError", {
+        //     message: "Server offline.",
+        // })
     }
+    console.log(errors);
     return (
         <div>
-            <form onSubmit={handleSubmit(onValid)}>
+
+            <form
+                style={{ display: "flex", flexDirection: "column" }}
+                onSubmit={handleSubmit(onValid)}
+            >
                 <input
                     {...register("email", {
-                        required: "It is required",
-                        // minLength: {
-                        //     value: 5,
-                        //     message: "It's too short"
-                        // }
+                        required: "Email is required",
                         pattern: {
                             value: /^[A-Za-z0-9._%+-]+@naver.com$/,
-                            message: "Only for naver users"
-                        }
+                            message: "Only naver.com emails allowed",
+                        },
                     })}
-                    placeholder="Write a to do" />
+                    placeholder="Email"
+                />
+                <span>{errors?.email?.message}</span>
+                <input
+                    {...register("firstName", {
+                        required: "write here",
+                        validate: {
+                            noNico: (value) =>
+                                value.includes("nico") ? "no nicos allowed" : true, //value.includes("nico") || "error message"
+                            noNick: (value) =>
+                                value.includes("nick") ? "no nicks allowed" : true,
+
+
+                        }
+                    }
+                    )}
+                    placeholder="First Name"
+                />
+                <span>{errors?.firstName?.message}</span>
+                <input
+                    {...register("lastName", { required: "write here" })}
+                    placeholder="Last Name"
+                />
+                <span>{errors?.lastName?.message}</span>
+                <input
+                    {...register("username", { required: "write here", minLength: 10 })}
+                    placeholder="Username"
+                />
+                <span>{errors?.username?.message}</span>
+                <input
+                    {...register("password", { required: "write here", minLength: 5 })}
+                    placeholder="Password"
+                />
+                <span>{errors?.password?.message}</span>
+                <input
+                    {...register("password1", {
+                        required: "Password is required",
+                    })}
+                    placeholder="Password1"
+                />
+                <span>{errors?.password1?.message}</span>
                 <button>Add</button>
+                <span>{errors?.extraError?.message}</span>
             </form>
-            <span>
-                {errors?.email?.message}
-            </span>
         </div>
     );
 
