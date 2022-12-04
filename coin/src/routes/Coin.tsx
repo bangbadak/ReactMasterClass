@@ -4,6 +4,7 @@ import { Link, PathMatch } from "react-router-dom";
 import { useLocation, useParams, useMatch, Routes, Route } from "react-router-dom";
 import styled from 'styled-components';
 import { Helmet } from 'react-helmet-async';
+import { Button } from "@mui/material";
 
 import { fetchCoinInfo, fetchCoinTickers } from "../api";
 import Chart from "./Chart";
@@ -37,6 +38,8 @@ const Title = styled.h1`
 const Loader = styled.span`
     text-align: center;
     display: block;
+      color:${props => props.theme.specTextColor};
+
 `
 
 const Overview = styled.div`
@@ -45,6 +48,7 @@ const Overview = styled.div`
   background-color: rgba(0, 0, 0, 0.5);
   padding: 10px 20px;
   border-radius: 10px;
+  color:${props => props.theme.specTextColor};
 `;
 const OverviewItem = styled.div`
   display: flex;
@@ -59,6 +63,8 @@ const OverviewItem = styled.div`
 `;
 const Description = styled.p`
   margin: 20px 0px;
+color:${props => props.theme.specTextColor};
+
 `;
 
 const Tabs = styled.div`
@@ -77,10 +83,11 @@ const Tab = styled.span<{ isActive: boolean }>`
   padding: 7px 0px;
   border-radius: 10px;
   color: ${(props) =>
-        props.isActive ? props.theme.accentColor : props.theme.textColor};
+        props.isActive ? props.theme.accentColor : props.theme.specTextColor};
   a {
     display: block;
   }
+
 `;
 
 
@@ -89,6 +96,8 @@ const BackButton = styled.button`
   color: 'light';
   border: 0px;
   border-radius: 5px;
+    color:${props => props.theme.specTextColor};
+
 `
 
 
@@ -181,8 +190,8 @@ const Coin = () => {
                     {state?.name ? state.name : loading ? "Loading..." : infoData?.name}
                 </title>
             </Helmet>
-            <Link to="/">
-                Go back
+            <Link to="/" style={{ color: "black" }}>
+                <Button>Go Back</Button>
             </Link>
             {/* <BackButton onClick={() => {
                 console.log("button clicked");

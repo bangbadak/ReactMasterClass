@@ -69,7 +69,10 @@ const Chart = ({ coinId }: CharProps) => {
                         },
                         yaxis: {
                             // show: false,
-
+                            // ! must be checked
+                            axisBorder: {
+                                color: 'black',
+                            },
                             labels: {
                                 formatter: (price) => `$${price.toFixed(0)}`,
                                 style: {

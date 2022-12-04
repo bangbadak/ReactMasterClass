@@ -1,14 +1,16 @@
 import styled from "styled-components";
 import { Link } from 'react-router-dom';
-import { useState, useEffect } from "react";
 import { useQuery } from "react-query";
 import { Helmet } from 'react-helmet-async';
-
-
+import { Button, IconButton } from '@mui/material';
 
 import { fetchCoins } from "../api";
 import { useSetRecoilState } from "recoil";
 import { isDarkAtom } from "../atoms";
+
+const ThemeButton = styled(Button)`
+    color: ${props => props.theme.specTextColor};
+`
 
 const Container = styled.div`
     padding: 0px 20px;
@@ -86,7 +88,7 @@ const Coins = () => {
             </Helmet>
             <Header>
                 <Title>코인</Title>
-                <button onClick={toggleDarkAtom}>Toggle Modes</button>
+                <ThemeButton onClick={toggleDarkAtom}>Change Theme</ThemeButton>
             </Header>
             {isLoading ? <Loader>Loading...</Loader>
                 : (<CoinsList>
